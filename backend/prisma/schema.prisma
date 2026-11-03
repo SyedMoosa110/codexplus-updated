@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SiteSettings {
+  id                   String   @id @default("main")
+  siteName             String   @default("CodeXplus")
+  logoText             String   @default("CX")
+  statusBadgeText      String   @default("All Systems Operational")
+  tagline              String   @default("Engineering High-Performance Digital Products & AI Systems")
+  heroBadge            String   @default("ENTERPRISE SOFTWARE & PRODUCT LAB")
+  heroTitle            String   @default("We Build Scalable Software, AI Systems & Modern Web Platforms")
+  heroHighlightedWords String   @default("Software, AI, Platforms")
+  heroSubtitle         String   @default("CodeXplus is an elite digital engineering studio crafting bespoke full-stack applications, biometric attendance ecosystems, enterprise ERPs, and conversion-engineered digital platforms.")
+  heroCtaPrimaryText   String   @default("Launch Cost Estimator")
+  heroCtaPrimaryLink   String   @default("#estimator")
+  heroCtaSecondaryText String   @default("Explore Showcase")
+  heroCtaSecondaryLink String   @default("#work")
+  stats                Json     @default("[]")
+  terminalLines        Json     @default("[]")
+  techStack            Json     @default("[]")
+  theme                Json     @default("{}")
+  navLinks             Json     @default("[]")
+  footerLinks          Json     @default("[]")
+  socialLinks          Json     @default("[]")
+  footerText           String   @default("Engineering High-Performance Digital Products, Biometric Security & Modern Enterprise Platforms.")
+  copyrightText        String   @default("CodeXplus Studio. All rights reserved.")
+  contactEmail         String   @default("contact@codexplus.com")
+  phone                String   @default("+1 (800) 555-0199")
+  address              String   @default("100 Innovation Way, Suite 800, San Francisco, CA 94105")
+  updatedAt            DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  summary     String
+  badge       String   @default("CORE CAPABILITY")
+  features    Json     @default("[]")
+  icon        String   @default("Code")
+  visualType  String   @default("flow") // flow, theme, ecommerce, cms, finance, biometric
+  gridSpan    String   @default("col-span-1")
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder, isPublished])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  category    String   // Web Apps, E-Commerce, ERP & Attendance, UI/UX
+  year        Int      @default(2025)
+  summary     String
+  client      String   @default("")
+  coverImage  String
+  tags        Json     @default("[]")
+  metrics     Json     @default("[]")
+  liveUrl     String?
+  githubUrl   String?
+  description String   @default("")
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, sortOrder, isPublished])
+}
+
+model ProcessStep {
+  id          String   @id @default(cuid())
+  stepNumber  String   @default("01")
+  title       String
+  description String
+  bullets     Json     @default("[]")
+  icon        String   @default("Compass")
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder, isPublished])
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  clientName  String
+  role        String
+  company     String
+  quote       String
+  avatarUrl   String?
+  rating      Int      @default(5)
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder, isPublished])
+}
+
+model Lead {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  company     String?
+  serviceType String?
+  budgetRange String?
+  timeline    String?
+  features    Json     @default("[]")
+  message     String
+  status      String   @default("NEW") // NEW, CONTACTED, CLOSED, ARCHIVED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
